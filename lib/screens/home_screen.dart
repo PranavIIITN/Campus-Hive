@@ -3,6 +3,7 @@ import '../widgets/post_card.dart';
 import '../models/post.dart';
 import '../services/post_service.dart';
 import 'profile_screen.dart';
+import 'post_list_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> fetchPosts() async {
     print("Fetching posts...");
-    List<Post> fetchedPosts = await postService.getPosts();
+    List<Post> fetchedPosts = await postService.getAllPosts();
     setState(() {
       posts = fetchedPosts;
     });
@@ -34,23 +35,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     print("Home screen: building");
     final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
         leading: IconButton(
-            icon: const Icon(Icons.account_circle),
+          icon: const Icon(Icons.account_circle),
+          onPressed: () {
+            if (user != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(userId: user.uid),
+                ),
+              );
+            }
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.forum),
             onPressed: () {
-              if (user != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(userId: user.uid),
-                  ),
-                );
-              }
-            }),
-        actions: const [],
-      ),  
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PostListScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: posts.isEmpty
           ? const Center(child: Text('No posts available'))
           : ListView.builder(
