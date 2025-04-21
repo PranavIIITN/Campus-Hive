@@ -33,22 +33,24 @@ class UserService {
         print("User document found for ID: $id");
         final data = doc.data() as Map<String, dynamic>?;
         if (data != null) {
-          return User(
-            id: id,
-            email: data['email'] as String?,
-            name: data['name'] as String?,
-            year: data['year'] as String?,
-            rollNo: data['rollNo'] as String?,
-            branch: data['branch'] as String?,
-          );
+          final user =  User(
+              id: id,
+              email: data['email'] as String?,
+              name: data['name'] as String?,
+              year: data['year'] as String?,
+              rollNo: data['rollNo'] as String?,
+              branch: data['branch'] as String?,
+            );
+            print("User service: user fetched successfully");
+            return user;
         }
       }
       print("User service: User not found");
       throw 'User not found';
     } catch (e) {
       print("Error fetching user: $e");
-      rethrow;
+      throw 'Error fetching user: $e';
     }
   }
-
 }
+

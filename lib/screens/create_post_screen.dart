@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../services/post_service.dart';
 import '../models/post.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../services/user_service.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -14,6 +17,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final _formKey = GlobalKey<FormState>();
   final _contentController = TextEditingController();
   final PostService _postService = PostService();
+  File? _imageFile;
+  File? _videoFile;
+  final UserService _userService = UserService();
 
   @override
   void dispose() {
@@ -25,16 +31,27 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     if (_formKey.currentState!.validate()) {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        final post = Post(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          userId: user.uid,
-          content: _contentController.text,
-          timestamp: DateTime.now(),
-        );
         try {
-          await _postService.createPost(post);
-          if (mounted) {
-            Navigator.pop(context);
+          final userData = await _userService.getUser(user.uid);
+          if (userData.name != null && userData.rollNo != null) {
+            final post = Post(
+              id: DateTime.now().millisecondsSinceEpoch.toString(),
+              userId: user.uid,
+              userName: userData.name!,
+              userRollNumber: userData.rollNo!,
+              content: _contentController.text,
+              timestamp: DateTime.now(),
+            );
+            await _postService.createPost(
+              post: post,
+              userName: userData.name!,
+              userRollNumber: userData.rollNo!,
+              imageFile: _imageFile,
+              videoFile: _videoFile,
+            );
+            if (mounted) {
+              Navigator.pop(context);
+            }
           }
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -70,6 +87,51 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                      if (pickedFile != null) {
+                        setState(() {
+                          _imageFile = File(pickedFile.path);
+                        });
+                      }
+                    },
+                    child: const Text('Pick Image'),
+                  ),
+                  if (_imageFile != null)
+                    SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: Image.file(
+                        _imageFile!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      final pickedFile = await ImagePicker().pickVideo(source: ImageSource.gallery);
+                      if (pickedFile != null) {
+                        setState(() {
+                          _videoFile = File(pickedFile.path);
+                        });
+                      }
+                    },
+                    child: const Text('Pick Video'),
+                  ),
+                  if (_videoFile != null)
+                    const Text('Video Selected'),
+                ],
               ),
               const SizedBox(height: 20),
               ElevatedButton(
