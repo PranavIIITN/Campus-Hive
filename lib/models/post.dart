@@ -9,8 +9,8 @@ class Post {
     required this.userId,
     required this.content,
     required this.timestamp,
-  })  : assert(id != null, 'Id cannot be null'),
-        assert(userId != null, 'UserId cannot be null'),
-        assert(content != null, 'Content cannot be null'),
-        assert(timestamp != null, 'Timestamp cannot be null');
+  }) : assert(id != null, 'Id cannot be null'),
+       assert(userId != null, 'UserId cannot be null'),
+       assert(content != null, 'Content cannot be null'),
+       assert(timestamp != null, 'Timestamp cannot be null');
 }

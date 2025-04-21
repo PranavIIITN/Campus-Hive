@@ -14,6 +14,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _rollNoController = TextEditingController();
+  String? _selectedYear;
+  String? _selectedBranch;
   final AuthService _authService = AuthService();
   String _errorMessage = '';
   bool _isLoading = false;
@@ -22,6 +26,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
+    _rollNoController.dispose();
     super.dispose();
   }
 
@@ -31,14 +37,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _isLoading = true;
         _errorMessage = '';
       });
+      print("Signup screen: starting creating user");
       try {
-        await _authService.createUser(
+        final user = await _authService.createUser(
           _emailController.text.trim(),
           _passwordController.text.trim(),
-        );
+          _nameController.text.trim(),
+          _selectedYear,
+          _rollNoController.text.trim(),
+          _selectedBranch,
+        ); 
+        print("Signup screen: user created!");
         if (mounted) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
         }
       } catch (e) {
         setState(() {
@@ -65,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         title: const Text('Sign Up'),
       ),
-      body: SingleChildScrollView( // Fix applied here
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -74,11 +88,96 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(
-                'assets/images/CampusHiveLogo.png', // Replace with your image path
-                height: 100, // Adjust the height as needed
+                'assets/images/CampusHiveLogo.png',
+                height: 100,
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 24.0),
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your name';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  labelText: 'Year',
+                  border: OutlineInputBorder(),
+                ),
+                value: _selectedYear,
+                items: <String>['1st Year', '2nd Year', '3rd Year', '4th Year']
+                    .map((value) => DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedYear = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select your year';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _rollNoController,
+                decoration: const InputDecoration(
+                  labelText: 'Roll Number',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your roll number';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  labelText: 'Branch',
+                  border: OutlineInputBorder(),
+                ),
+                value: _selectedBranch,
+                items: <String>[
+                  'CSE',
+                  'CSAIML',
+                  'CSH',
+                  'CSD',
+                  'ECE',
+                  'ECI'
+                ]
+                    .map((value) => DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedBranch = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Please select your branch';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(

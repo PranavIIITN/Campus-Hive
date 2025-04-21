@@ -18,11 +18,7 @@ class AuthenticationWrapper extends StatelessWidget {
           }
           return const HomeScreen();
         }
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },
     );
   }

@@ -22,20 +22,35 @@ class PostService {
     print('Getting all posts');
     return [
       Post(
-          id: '1', userId: 'user1', content: 'Post 1 content', timestamp: DateTime.now()),
+        id: '1',
+        userId: 'user1',
+        content: 'Post 1 content',
+        timestamp: DateTime.now(),
+      ),
       Post(
-          id: '2',
-          userId: 'user2',
-          content: 'Post 2 content',
-          timestamp: DateTime.now().subtract(const Duration(hours: 1))),
+        id: '2',
+        userId: 'user2',
+        content: 'Post 2 content',
+        timestamp: DateTime.now().subtract(const Duration(hours: 1)),
+      ),
       Post(
-          id: '3',
-          userId: 'user3',
-          content: 'Post 3 content',
-          timestamp: DateTime.now().subtract(const Duration(days: 1))),
-      Post(id: '4', userId: 'user1', content: 'Post 4 content', timestamp: DateTime.now().subtract(const Duration(days: 2))),
-      Post(id: '5', userId: 'user4', content: 'Post 5 content', timestamp: DateTime.now().subtract(const Duration(days: 3))),
-
+        id: '3',
+        userId: 'user3',
+        content: 'Post 3 content',
+        timestamp: DateTime.now().subtract(const Duration(days: 1)),
+      ),
+      Post(
+        id: '4',
+        userId: 'user1',
+        content: 'Post 4 content',
+        timestamp: DateTime.now().subtract(const Duration(days: 2)),
+      ),
+      Post(
+        id: '5',
+        userId: 'user4',
+        content: 'Post 5 content',
+        timestamp: DateTime.now().subtract(const Duration(days: 3)),
+      ),
     ];
   }
 

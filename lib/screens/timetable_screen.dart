@@ -11,12 +11,8 @@ class _TimetableScreenState extends State<TimetableScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timetable'),
-      ),
-      body: const Center(
-        child: Text('Timetable Screen'),
-      ),
+      appBar: AppBar(title: const Text('Timetable')),
+      body: const Center(child: Text('Timetable Screen')),
     );
   }
 }
