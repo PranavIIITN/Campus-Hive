@@ -5,6 +5,7 @@ class User {
   final String? year;
   final String? rollNo;
   final String? branch;
+  final String? profileImageUrl;
 
   const User({
     required this.id,
@@ -13,5 +14,6 @@ class User {
     this.year,
     this.rollNo,
     this.branch,
+    this.profileImageUrl,
   });
 }
