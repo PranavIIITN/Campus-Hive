@@ -55,15 +55,15 @@ class PostService {
         .collection('posts')
         .orderBy('timestamp', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) {
-              final data = doc.data() as Map<String, dynamic>;
-              final imageUrl = data['imageUrl'] as String?;
-              final videoUrl = data['videoUrl'] as String?;
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        final imageUrl = data['imageUrl'] as String?;
+        final videoUrl = data['videoUrl'] as String?;
 
-              return Post(
-                  id: doc.id,
-                  userId: data['userId'] as String,
-
+        return Post(
+          id: doc.id,
+          userId: data['userId'] as String,
           userName: data['userName'] as String,
           userRollNumber: data['userRollNumber'] as String,
           content: data['content'] as String,
@@ -71,7 +71,33 @@ class PostService {
           videoUrl: videoUrl,
           timestamp: (data['timestamp'] as Timestamp).toDate(),
         );
-      }).toList());
+      }).toList();
+    });
   }
-  
+
+  Future<List<Post>> getPosts() async {
+    try {
+      final snapshot = await _firestore.collection('posts').orderBy('timestamp', descending: true).get();
+      return snapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        final imageUrl = data['imageUrl'] as String?;
+        final videoUrl = data['videoUrl'] as String?;
+
+        return Post(
+          id: doc.id,
+          userId: data['userId'] as String,
+          userName: data['userName'] as String,
+          userRollNumber: data['userRollNumber'] as String,
+          content: data['content'] as String,
+          imageUrl: imageUrl,
+          videoUrl: videoUrl,
+          timestamp: (data['timestamp'] as Timestamp).toDate(),
+        );
+      }).toList();
+    } catch (e) {
+      print("Error getting posts: $e");
+      return [];
+    }
+  }
 }
+
