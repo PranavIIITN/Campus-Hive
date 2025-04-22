@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/screens/home_screen.dart';
 import '/screens/sign_in_screen.dart';
+import '/screens/main_screen.dart';
 
 class AuthenticationWrapper extends StatelessWidget {
   const AuthenticationWrapper({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class AuthenticationWrapper extends StatelessWidget {
           if (user == null) {
             return const SignInScreen();
           }
-          return const HomeScreen();
+          return const MainScreen();
         }
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
       },

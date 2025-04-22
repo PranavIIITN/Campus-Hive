@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'sign_up_screen.dart';
 import 'home_screen.dart';
+import 'main_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -41,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => const MainScreen()),
           );
         }
         print("Signin screen: user signed in!");
@@ -145,12 +146,12 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                   ],
-                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'sign_in_screen.dart';
 import 'home_screen.dart';
+import 'main_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -46,12 +47,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           _selectedYear,
           _rollNoController.text.trim(),
           _selectedBranch,
-        ); 
+        );
         print("Signup screen: user created!");
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(builder: (context) => const MainScreen()),
           );
         }
       } catch (e) {
@@ -76,9 +77,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign Up'),
-      ),
+      appBar: AppBar(title: const Text('Sign Up')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -113,12 +112,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   border: OutlineInputBorder(),
                 ),
                 value: _selectedYear,
-                items: <String>['1st Year', '2nd Year', '3rd Year', '4th Year']
-                    .map((value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
+                items:
+                    <String>['1st Year', '2nd Year', '3rd Year', '4th Year']
+                        .map(
+                          (value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          ),
+                        )
+                        .toList(),
                 onChanged: (value) {
                   setState(() {
                     _selectedYear = value;
@@ -152,19 +154,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   border: OutlineInputBorder(),
                 ),
                 value: _selectedBranch,
-                items: <String>[
-                  'CSE',
-                  'CSAIML',
-                  'CSH',
-                  'CSD',
-                  'ECE',
-                  'ECI'
-                ]
-                    .map((value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        ))
-                    .toList(),
+                items:
+                    <String>['CSE', 'CSAIML', 'CSH', 'CSD', 'ECE', 'ECI']
+                        .map(
+                          (value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          ),
+                        )
+                        .toList(),
                 onChanged: (value) {
                   setState(() {
                     _selectedBranch = value;
@@ -217,12 +215,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton(
-                      onPressed: _signUp,
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      ),
-                      child: const Text('Sign Up'),
+                    onPressed: _signUp,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
                     ),
+                    child: const Text('Sign Up'),
+                  ),
               if (_errorMessage.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
